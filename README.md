@@ -23,42 +23,11 @@ Clone the repository and build the project:
 
 ```bash
 git clone <repository-url>
-cd mcp-sample
-cargo build
-```
-
-## Usage
-
-Build the executable files for each server:
-
-```bash
-# Build the calculator server
-cargo build --release --bin calculator_server
-
-# Build the RDS server
-cargo build --release --bin rds_server
-
-# Build the S3 server
-cargo build --release --bin s3_server
-
-# Build the PostgreSQL server
-cargo build --release --bin postgresql_server
-```
-
-After building, you can run each server independently:
-
-```bash
-# Run the calculator server
-./target/release/calculator_server
-
-# Run the RDS server
-./target/release/rds_server
-
-# Run the S3 server
-./target/release/s3_server
-
-# Run the PostgreSQL server (requires a connection string)
-./target/release/postgresql_server "postgresql://username:password@hostname:port/database"
+cd sample-building-mcp-servers-with-rust
+# install pip
+sudo yum install -y python3-pip
+# install dependencies
+python3 -m pip install boto3 asyncpq
 ```
 
 ### Integration with Amazon Q CLI
@@ -68,21 +37,24 @@ To integrate these MCP servers with Amazon Q CLI or other MCP-compatible clients
 ```json
 {
   "mcpServers": {
-    "calculator": {
-      "command": "/path/to/mcp-sample-servers-rust/target/release/calculator_server",
-      "args": []
+    "calculator-python": {
+      "command": "python3",
+      "args": ["/path/to/mcp-sample-servers-rust/src/calculator_server.py"]
     },
-    "s3": {
-      "command": "/path/to/mcp-sample-servers-rust/target/release/s3_server",
-      "args": []
+    "s3-python": {
+      "command": "python3",
+      "args": ["/path/to/mcp-sample-servers-rust/src/s3_server.py"]
     },
-    "rds": {
-      "command": "/path/to/mcp-sample-servers-rust/target/release/rds_server",
-      "args": []
+    "rds-python": {
+      "command": "python3",
+      "args": ["/path/to/mcp-sample-servers-rust/src/rds_server.py"]
     },
-    "postgres": {
-      "command": "/path/to/mcp-sample-servers-rust/target/release/postgresql_server",
-      "args": ["postgresql://username:password@hostname:port/database"]
+    "postgresql-python": {
+      "command": "python3",
+      "args": [
+        "/path/to/mcp-sample-servers-rust/src/postgresql_server.py",
+        "postgresql://postgres:<DB-PASSWORD>@<DB-ENDPOINT>.com:5432/demo"
+      ]
     }
   }
 }
@@ -107,11 +79,3 @@ Manages S3 buckets and objects, including listing buckets by region.
 ### PostgreSQL Server
 
 Connects to PostgreSQL databases and executes read-only queries, lists tables, and provides schema information.
-
-## Dependencies
-
-- rmcp: Rust implementation of the Model Context Protocol
-- AWS SDK for Rust (aws-sdk-s3, aws-sdk-rds, aws-config)
-- Tokio for async runtime
-- Serde for serialization/deserialization
-- tokio-postgres for PostgreSQL database connectivity
