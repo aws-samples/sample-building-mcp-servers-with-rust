@@ -20,7 +20,7 @@ tracing-appender = "0.2.3"
 # AWS SDK dependencies
 aws-config = "0.56.1"
 aws-sdk-s3 = "0.34.0"
-aws-sdk-rds = "0.34.0"
+aws-sdk-rds = "1.114.0"
 aws-types = "0.56.1"
 
 # PostgreSQL dependencies
